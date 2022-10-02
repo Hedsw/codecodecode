@@ -1,0 +1,32 @@
+class Solution:
+    # Brute Force 
+    # Time - O(n^3), Space - O(1)
+    def subarraysDivByK2(self, nums: List[int], k: int) -> int:
+        answer = 0
+        n = len(nums)
+        for start in range(n):
+            for end in range(start,n):
+                subarraySum = sum(nums[start:end+1])
+                if subarraySum % k == 0:
+                    answer += 1
+        return answer
+    
+    # Using Hashmap + prefix 
+    # Time - O(N) Space -O(1) 
+    def subarraysDivByK(self, nums: List[int], k: int) -> int:
+		#Hashmap to store remainders of prefixsum. We have to count the number of subaarays hence storing hashmap[0] = 1 as we have 0 sum at starting
+        memo = {0:1}
+        answer = 0
+        prefixSum = 0
+		
+        for i in range(len(nums)):
+            prefixSum += nums[i]
+            prefixSum %= k
+			
+            if prefixSum in memo:
+                answer += memo[prefixSum]
+                memo[prefixSum] += 1
+            else:
+                memo[prefixSum] = 1
+				
+        return answer
